@@ -8,8 +8,8 @@ clear all;
 clc;
 
 % Load data train
-[dataA,dataB,dataC,dataD,dataE] = loadTestset;
-% [dataA,dataB,dataC,dataD,dataE] = loadTrainset;
+% [dataA,dataB,dataC,dataD,dataE] = loadTestset;
+[dataA,dataB,dataC,dataD,dataE,dataTarget] = loadTrainset;
 M = [dataA,dataB,dataC,dataD,dataE];
 % M = mean(A,2);
 
@@ -19,6 +19,21 @@ maxU = max(U);
 
 index1 = find(U(1,:) == maxU);
 index2 = find(U(2,:) == maxU);
+index3 = zeros(1,6000,'uint32');
+for i = 1:6000
+    if (U(2, i) > U(1, i)) 
+        index3(i) = 1;
+    end
+end
+
+accuracy = 0;
+index3 = index3';
+for i = 1:6000
+    if (index3(i) == dataTarget(i)) 
+        accuracy = accuracy + 1;
+    end
+end
+persen = accuracy/60
 
 hold on
 plot(M(index1,1),M(index1,2),'ob')
