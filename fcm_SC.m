@@ -8,12 +8,11 @@ clear all;
 clc;
 
 % Load data train
-% [dataA,dataB,dataC,dataD,dataE] = loadTestset;
-[dataA,dataB,dataC,dataD,dataE,dataTarget] = loadTrainset;
+[dataA,dataB,dataC,dataD,dataE] = loadTrainset;
 M = [dataA,dataB,dataC,dataD,dataE];
-% M = mean(A,2);
 
-[centers,U] = fcm(M,2);
+opts = [1.01;1000;1e-6;1];
+[centers,U] = fcm(M,2,opts);
 
 maxU = max(U);
 
@@ -26,18 +25,21 @@ for i = 1:6000
     end
 end
 
+[dataA,dataB,dataC,dataD,dataE,dataTarget] = loadTestset;
+M = [dataA,dataB,dataC,dataD,dataE];
+index4 = zeros(1,2000,'uint32');
+
+for i = 1:2000
+    x = distfcm(centers,M(i,:));
+    if (x(2)>x(1)) index4(i) = 1;
+    end
+end
+
 accuracy = 0;
-index3 = index3';
-for i = 1:6000
-    if (index3(i) == dataTarget(i)) 
+index4 = index4';
+for i = 1:2000
+    if (index4(i) == dataTarget(i)) 
         accuracy = accuracy + 1;
     end
 end
-persen = accuracy/60
-
-hold on
-plot(M(index1,1),M(index1,2),'ob')
-plot(M(index2,1),M(index2,2),'or')
-plot(centers(1,1),centers(1,2),'xb','MarkerSize',15,'LineWidth',3)
-plot(centers(2,1),centers(2,2),'xr','MarkerSize',15,'LineWidth',3)
-hold off
+persen = accuracy/20
