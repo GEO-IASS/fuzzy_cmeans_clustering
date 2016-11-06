@@ -1,17 +1,16 @@
 % File: fcm_SC.m
 % Desc: Fuzzy C Means Clustering (Soft Computing Task 1 Extended)
 % Date: 01 November 2016
-% Author: Eliza Riviera Rachmawati Jasin - 1103130144
 
 close all;
 clear all;
 clc;
 
 % Load data train
+
 [dataA,dataB,dataC,dataD,dataE] = loadTrainset;
 M = [dataA,dataB,dataC,dataD,dataE];
-
-opts = [1.01;1000;1e-6;1];
+opts = [2.9;10000;1e-6;1];
 [centers,U] = fcm(M,2,opts);
 
 maxU = max(U);
@@ -35,11 +34,11 @@ for i = 1:2000
     end
 end
 
-accuracy = 0;
+ansTrue = 0;
 index4 = index4';
 for i = 1:2000
     if (index4(i) == dataTarget(i)) 
-        accuracy = accuracy + 1;
+        ansTrue = ansTrue + 1;
     end
 end
-persen = accuracy/20
+accuracy = ansTrue/20
